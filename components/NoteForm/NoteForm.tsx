@@ -1,10 +1,12 @@
 "use client";
 
-import { Formik, Form, Field, ErrorMessage } from "formik";
+import { Formik, Form, Field, ErrorMessage as FormikError } from "formik";
 import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/lib/api";
 import { NoteTag } from "@/types/note";
+import MyCustomError from "@/components/ErrorMessage/ErrorMessage";
+import css from "./NoteForm.module.css";
 
 interface NoteFormProps {
   onCancel: () => void;
@@ -34,14 +36,28 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
       validationSchema={NoteSchema}
       onSubmit={(values) => mutation.mutate(values)}
     >
-      <Form>
-        <Field name="title" placeholder="Title" />
-        <ErrorMessage name="title" component="div" />
+      <Form className={css.form}>
+        <div className={css.field}>
+          <Field name="title" placeholder="Title" className={css.input} />
+          {/* Використовуємо кастомний компонент помилки */}
+          <FormikError name="title">
+            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+          </FormikError>
+        </div>
 
-        <Field name="content" as="textarea" placeholder="Content (optional)" />
-        <ErrorMessage name="content" component="div" />
+        <div className={css.field}>
+          <Field
+            name="content"
+            as="textarea"
+            placeholder="Content (optional)"
+            className={css.textarea}
+          />
+          <FormikError name="content">
+            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+          </FormikError>
+        </div>
 
-        <Field name="tag" as="select">
+        <Field name="tag" as="select" className={css.select}>
           <option value="Todo">Todo</option>
           <option value="Work">Work</option>
           <option value="Personal">Personal</option>
@@ -49,12 +65,19 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
           <option value="Shopping">Shopping</option>
         </Field>
 
-        <button type="submit" disabled={mutation.isPending}>
-          Save
-        </button>
-        <button type="button" onClick={onCancel}>
-          Cancel
-        </button>
+        <div className={css.buttons}>
+          {/* Пункт 2 зауважень: правильний текст на кнопці */}
+          <button
+            type="submit"
+            className={css.submitBtn}
+            disabled={mutation.isPending}
+          >
+            {mutation.isPending ? "Creating..." : "Create note"}
+          </button>
+          <button type="button" onClick={onCancel} className={css.cancelBtn}>
+            Cancel
+          </button>
+        </div>
       </Form>
     </Formik>
   );

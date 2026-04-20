@@ -9,6 +9,7 @@ import NoteForm from "@/components/NoteForm/NoteForm";
 import SearchBox from "@/components/SearchBox/SearchBox";
 import Modal from "@/components/Modal/Modal";
 import Pagination from "@/components/Pagination/Pagination";
+import css from "./Notes.client.module.css";
 
 export default function NotesClient() {
   const [search, setSearch] = useState("");
@@ -35,9 +36,12 @@ export default function NotesClient() {
     placeholderData: (previousData) => previousData,
   });
 
+  // Логіка відображення пагінації (Пункт 1 зауважень)
+  const shouldShowPagination = data && data.total > 6 && data.data.length > 0;
+
   return (
-    <main>
-      <section>
+    <main className={css.mainContainer}>
+      <section className={css.controls}>
         <SearchBox
           value={search}
           onChange={(v) => {
@@ -45,26 +49,30 @@ export default function NotesClient() {
             debouncedHandler(v);
           }}
         />
-        <button onClick={() => setIsModalOpen(true)}>Add Note</button>
+        <button className={css.addBtn} onClick={() => setIsModalOpen(true)}>
+          Add Note
+        </button>
+      </section>
 
-        {isLoading && !data ? (
-          <p>Loading...</p>
-        ) : (
-          <NoteList notes={data?.data || []} />
-        )}
+      {isLoading && !data ? (
+        <p>Loading...</p>
+      ) : (
+        <NoteList notes={data?.data || []} />
+      )}
 
+      {shouldShowPagination && (
         <Pagination
-          pageCount={data ? Math.ceil(data.total / 6) : 1}
+          pageCount={Math.ceil(data.total / 6)}
           forcePage={page - 1}
           onPageChange={({ selected }) => setPage(selected + 1)}
         />
+      )}
 
-        {isModalOpen && (
-          <Modal onClose={() => setIsModalOpen(false)}>
-            <NoteForm onCancel={() => setIsModalOpen(false)} />
-          </Modal>
-        )}
-      </section>
+      {isModalOpen && (
+        <Modal onClose={() => setIsModalOpen(false)}>
+          <NoteForm onCancel={() => setIsModalOpen(false)} />
+        </Modal>
+      )}
     </main>
   );
 }
