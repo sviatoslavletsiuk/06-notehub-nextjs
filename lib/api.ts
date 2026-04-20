@@ -1,6 +1,5 @@
 import axios from "axios";
 import { Note, CreateNoteDto } from "@/types/note";
-import { log } from "console";
 
 const api = axios.create({
   baseURL: "https://69e5c49fce4e908a155e61b0.mockapi.io/api/v1",
