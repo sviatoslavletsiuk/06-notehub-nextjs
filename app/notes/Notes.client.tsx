@@ -36,7 +36,7 @@ export default function NotesClient() {
     placeholderData: (previousData) => previousData,
   });
 
-  // Логіка відображення пагінації (Пункт 1 зауважень)
+  // Логіка відображення пагінації за вимогою ментора
   const shouldShowPagination = data && data.total > 6 && data.data.length > 0;
 
   return (

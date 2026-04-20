@@ -13,15 +13,16 @@ interface NoteFormProps {
 }
 
 const NoteSchema = Yup.object().shape({
-  title: Yup.string().min(3, "Too short").required("Required"),
-  content: Yup.string().max(500, "Too long"),
+  title: Yup.string().min(3, "Too short").required("Title is required"),
+  content: Yup.string().max(500, "Content must be at most 500 characters"),
   tag: Yup.string()
     .oneOf(["Todo", "Work", "Personal", "Meeting", "Shopping"])
-    .required("Required"),
+    .required("Tag is required"),
 });
 
 export default function NoteForm({ onCancel }: NoteFormProps) {
   const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: createNote,
     onSuccess: () => {
@@ -32,41 +33,50 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
 
   return (
     <Formik
-      initialValues={{ title: "", content: "", tag: "Personal" as NoteTag }}
+      initialValues={{
+        title: "",
+        content: "",
+        tag: "Personal" as NoteTag,
+      }}
       validationSchema={NoteSchema}
       onSubmit={(values) => mutation.mutate(values)}
     >
       <Form className={css.form}>
-        <div className={css.field}>
-          <Field name="title" placeholder="Title" className={css.input} />
-          {/* Використовуємо кастомний компонент помилки */}
+        <h2 className={css.formTitle}>Add New Note</h2>
+
+        <div className={css.fieldWrapper}>
+          <Field name="title" placeholder="Title" className={css.inputField} />
           <FormikError name="title">
             {(msg) => <MyCustomError>{msg}</MyCustomError>}
           </FormikError>
         </div>
 
-        <div className={css.field}>
+        <div className={css.fieldWrapper}>
           <Field
             name="content"
             as="textarea"
             placeholder="Content (optional)"
-            className={css.textarea}
+            className={css.textareaField}
           />
           <FormikError name="content">
             {(msg) => <MyCustomError>{msg}</MyCustomError>}
           </FormikError>
         </div>
 
-        <Field name="tag" as="select" className={css.select}>
-          <option value="Todo">Todo</option>
-          <option value="Work">Work</option>
-          <option value="Personal">Personal</option>
-          <option value="Meeting">Meeting</option>
-          <option value="Shopping">Shopping</option>
-        </Field>
+        <div className={css.fieldWrapper}>
+          <Field name="tag" as="select" className={css.selectField}>
+            <option value="Todo">Todo</option>
+            <option value="Work">Work</option>
+            <option value="Personal">Personal</option>
+            <option value="Meeting">Meeting</option>
+            <option value="Shopping">Shopping</option>
+          </Field>
+          <FormikError name="tag">
+            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+          </FormikError>
+        </div>
 
-        <div className={css.buttons}>
-          {/* Пункт 2 зауважень: правильний текст на кнопці */}
+        <div className={css.formActions}>
           <button
             type="submit"
             className={css.submitBtn}
@@ -74,7 +84,7 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
           >
             {mutation.isPending ? "Creating..." : "Create note"}
           </button>
-          <button type="button" onClick={onCancel} className={css.cancelBtn}>
+          <button type="button" className={css.cancelBtn} onClick={onCancel}>
             Cancel
           </button>
         </div>

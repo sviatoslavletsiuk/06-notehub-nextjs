@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import css from "./ErrorMessage.module.css";
 
 interface ErrorMessageProps {
@@ -7,5 +8,9 @@ interface ErrorMessageProps {
 }
 
 export default function ErrorMessage({ children }: ErrorMessageProps) {
-  return <div className={css.error}>{children}</div>;
+  return (
+    <div className={css.errorContainer} role="alert">
+      {children}
+    </div>
+  );
 }
