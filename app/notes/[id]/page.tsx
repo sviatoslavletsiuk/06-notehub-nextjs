@@ -3,7 +3,7 @@ import {
   HydrationBoundary,
   QueryClient,
 } from "@tanstack/react-query";
-import { fetchNoteById } from "@/lib/api/noteApi";
+import { fetchNoteById } from "@/lib/api/api";
 import NoteDetailsClient from "./NoteDetails.client";
 
 // В Next.js 15 params — це Promise
