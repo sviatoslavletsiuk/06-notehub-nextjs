@@ -8,7 +8,6 @@ const api = axios.create({
   },
 });
 
-// 1. Отримання списку нотаток з пагінацією та пошуком
 export const fetchNotes = async (
   search: string = "",
   page: number = 1,
@@ -24,19 +23,16 @@ export const fetchNotes = async (
   return data;
 };
 
-// 2. Отримання ОДНІЄЇ нотатки за ID (ЦЬОГО ФРАГМЕНТУ ВАМ НЕ ВИСТАЧАЛО)
 export const fetchNoteById = async (id: string): Promise<Note> => {
   const { data } = await api.get<Note>(`/notes/${id}`);
   return data;
 };
 
-// 3. Створення нотатки
 export const createNote = async (note: CreateNoteDto): Promise<Note> => {
   const { data } = await api.post<Note>("/notes", note);
   return data;
 };
 
-// 4. Видалення нотатки
 export const deleteNote = async (id: string): Promise<void> => {
   await api.delete(`/notes/${id}`);
 };

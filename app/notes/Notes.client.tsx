@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchNotes, deleteNote, createNote } from "@/lib/api/api";
+import { fetchNotes, deleteNote, createNote } from "@/lib/api";
 import { Note, CreateNoteDto } from "@/types/note";
 
 import NoteList from "@/components/NoteList/NoteList";
