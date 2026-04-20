@@ -5,7 +5,7 @@ import * as Yup from "yup";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createNote } from "@/lib/api";
 import { NoteTag } from "@/types/note";
-import MyCustomError from "@/components/ErrorMessage/ErrorMessage";
+import ErrorMessage from "@/components/ErrorMessage/ErrorMessage";
 import css from "./NoteForm.module.css";
 
 interface NoteFormProps {
@@ -33,21 +33,15 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
 
   return (
     <Formik
-      initialValues={{
-        title: "",
-        content: "",
-        tag: "Personal" as NoteTag,
-      }}
+      initialValues={{ title: "", content: "", tag: "Personal" as NoteTag }}
       validationSchema={NoteSchema}
       onSubmit={(values) => mutation.mutate(values)}
     >
       <Form className={css.form}>
-        <h2 className={css.formTitle}>Add New Note</h2>
-
         <div className={css.fieldWrapper}>
           <Field name="title" placeholder="Title" className={css.inputField} />
           <FormikError name="title">
-            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+            {(msg) => <ErrorMessage>{msg}</ErrorMessage>}
           </FormikError>
         </div>
 
@@ -59,7 +53,7 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
             className={css.textareaField}
           />
           <FormikError name="content">
-            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+            {(msg) => <ErrorMessage>{msg}</ErrorMessage>}
           </FormikError>
         </div>
 
@@ -72,7 +66,7 @@ export default function NoteForm({ onCancel }: NoteFormProps) {
             <option value="Shopping">Shopping</option>
           </Field>
           <FormikError name="tag">
-            {(msg) => <MyCustomError>{msg}</MyCustomError>}
+            {(msg) => <ErrorMessage>{msg}</ErrorMessage>}
           </FormikError>
         </div>
 

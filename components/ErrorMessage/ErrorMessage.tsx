@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import css from "./ErrorMessage.module.css";
+import css from "./ErrorMessage.module.css"; // Переконайся, що назва файлу збігається
 
 interface ErrorMessageProps {
   children: React.ReactNode;

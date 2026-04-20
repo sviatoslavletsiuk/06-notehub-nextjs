@@ -36,7 +36,7 @@ export default function NotesClient() {
     placeholderData: (previousData) => previousData,
   });
 
-  // Логіка відображення пагінації за вимогою ментора
+  // Пагінація відображається лише якщо сторінок > 1
   const shouldShowPagination = data && data.total > 6 && data.data.length > 0;
 
   return (

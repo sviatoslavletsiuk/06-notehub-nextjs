@@ -22,11 +22,10 @@ export const fetchNotes = async (
     params: {
       search: search || undefined,
       page,
-      limit, // MockAPI очікує limit для пагінації
+      limit, // Використовуємо limit замість perPage
     },
   });
 
-  // MockAPI зазвичай повертає заголовок x-total-count
   return {
     data,
     total: parseInt(headers["x-total-count"] || "50"),
