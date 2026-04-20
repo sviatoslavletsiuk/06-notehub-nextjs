@@ -1,10 +1,9 @@
 import axios from "axios";
 import { Note, CreateNoteDto } from "@/types/note";
 
-// Оновлений інтерфейс згідно з відповіддю вашого API
 export interface NotesResponse {
-  notes: Note[]; // Ментор вимагає 'notes' замість 'data'
-  totalPages: number; // Ментор вимагає 'totalPages' замість 'total'
+  data: Note[];
+  total: number;
 }
 
 const api = axios.create({
@@ -17,21 +16,19 @@ const api = axios.create({
 export const fetchNotes = async (
   search: string = "",
   page: number = 1,
-  perPage: number = 6, // Повертаємо perPage згідно з вимогами API
+  limit: number = 6,
 ): Promise<NotesResponse> => {
-  // Робимо запит до API
-  const { data } = await api.get<NotesResponse>("/notes", {
+  const { data, headers } = await api.get<Note[]>("/notes", {
     params: {
       search: search || undefined,
       page,
-      perPage, // Використовуємо perPage
+      limit, // Використовуємо limit замість perPage
     },
   });
 
-  // Повертаємо дані у структурі, яку очікує ментор
   return {
-    notes: data.notes,
-    totalPages: data.totalPages,
+    data,
+    total: parseInt(headers["x-total-count"] || "50"),
   };
 };
 
