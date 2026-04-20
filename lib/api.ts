@@ -2,8 +2,8 @@ import axios from "axios";
 import { Note, CreateNoteDto } from "@/types/note";
 
 export interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
+  data: Note[];
+  total: number;
 }
 
 const api = axios.create({
@@ -18,14 +18,19 @@ export const fetchNotes = async (
   page: number = 1,
   limit: number = 6,
 ): Promise<NotesResponse> => {
-  const { data } = await api.get<NotesResponse>("/notes", {
+  const { data, headers } = await api.get<Note[]>("/notes", {
     params: {
       search: search || undefined,
       page,
-      perPage: limit,
+      limit, // MockAPI очікує limit для пагінації
     },
   });
-  return data;
+
+  // MockAPI зазвичай повертає заголовок x-total-count
+  return {
+    data,
+    total: parseInt(headers["x-total-count"] || "50"),
+  };
 };
 
 export const fetchNoteById = async (id: string): Promise<Note> => {

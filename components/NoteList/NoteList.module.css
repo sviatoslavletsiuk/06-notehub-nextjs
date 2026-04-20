@@ -1,62 +1,70 @@
-.list {
+.noteGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 20px;
   list-style: none;
-  padding: 0;
+  padding: 20px 0;
 }
 
-.item {
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
+.noteCard {
+  border: 1px solid #e0e0e0;
+  border-radius: 12px;
   padding: 20px;
+  background-color: #ffffff;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  transition:
-    transform 0.2s,
-    box-shadow 0.2s;
-  background: white;
+  position: relative;
 }
 
-.item:hover {
+.noteCard:hover {
   transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.05);
 }
 
-.link {
+.noteLink {
   text-decoration: none;
   color: inherit;
+  display: block;
+  margin-bottom: 40px;
 }
 
-.link h3 {
+.noteTitle {
   margin: 0 0 10px 0;
-  color: #111;
+  font-size: 1.25rem;
+  color: #333;
 }
 
-.content {
-  font-size: 0.9rem;
+.noteContent {
   color: #666;
+  font-size: 0.95rem;
   line-height: 1.5;
-  margin-bottom: 15px;
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+}
+
+.noteTag {
+  display: inline-block;
+  background: #f0f0f0;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  color: #555;
+  margin-top: 10px;
 }
 
 .deleteBtn {
-  align-self: flex-end;
-  background: #ff4d4f;
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  background-color: #ff4d4f;
   color: white;
   border: none;
-  padding: 5px 12px;
-  border-radius: 4px;
+  padding: 6px 12px;
+  border-radius: 6px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 0.85rem;
 }
 
 .deleteBtn:hover {
-  background: #d9363e;
+  background-color: #ff7875;
 }

@@ -4,7 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteNote } from "@/lib/api";
 import { Note } from "@/types/note";
 import Link from "next/link";
-import css from "./NoteList.module.css";
+import css from "./NoteList.module.css"; // Переконайся, що шлях правильний
 
 interface NoteListProps {
   notes: Note[];
@@ -13,24 +13,24 @@ interface NoteListProps {
 export default function NoteList({ notes }: NoteListProps) {
   const queryClient = useQueryClient();
 
+  // Додай цей рядок для перевірки в консолі браузера
+  console.log("CSS Modules object:", css);
+
   const mutation = useMutation({
-    mutationFn: deleteNote,
+    mutationFn: (id: string) => deleteNote(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notes"] });
     },
   });
 
-  if (notes.length === 0) return <p>No notes found.</p>;
-
   return (
-    <ul className={css.list}>
+    <ul className={css.noteGrid}>
       {notes.map((note) => (
-        <li key={note.id} className={css.item}>
-          <Link href={`/notes/${note.id}`} className={css.link}>
-            <h3>{note.title}</h3>
-            <p className={css.content}>{note.content}</p>
-            <span className={css.tag}>{note.tag}</span>{" "}
-            {/* Тепер відображається */}
+        <li key={note.id} className={css.noteCard}>
+          <Link href={`/notes/${note.id}`} className={css.noteLink}>
+            <h3 className={css.noteTitle}>{note.title}</h3>
+            <p className={css.noteContent}>{note.content}</p>
+            <span className={css.noteTag}>Tag: {note.tag}</span>
           </Link>
           <button
             className={css.deleteBtn}
