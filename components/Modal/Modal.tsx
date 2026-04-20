@@ -1,31 +1,34 @@
 "use client";
-import { useEffect, ReactNode } from "react";
+
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
 import css from "./Modal.module.css";
 
 export default function Modal({
   children,
   onClose,
 }: {
-  children: ReactNode;
+  children: React.ReactNode;
   onClose: () => void;
 }) {
   useEffect(() => {
-    const handleEsc = (e: KeyboardEvent) => e.key === "Escape" && onClose();
+    document.body.style.overflow = "hidden"; // Блокуємо прокрутку (вимога ментора)
+    const handleEsc = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
     window.addEventListener("keydown", handleEsc);
-    return () => window.removeEventListener("keydown", handleEsc);
+    return () => {
+      document.body.style.overflow = "unset";
+      window.removeEventListener("keydown", handleEsc);
+    };
   }, [onClose]);
 
-  return (
-    <div
-      className={css.backdrop}
-      onClick={(e) => e.target === e.currentTarget && onClose()}
-    >
-      <div className={css.modal}>
-        <button className={css.closeBtn} onClick={onClose}>
-          ×
-        </button>
+  return createPortal(
+    <div className={css.backdrop} onClick={onClose}>
+      <div className={css.content} onClick={(e) => e.stopPropagation()}>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }

@@ -12,11 +12,16 @@
     "@tanstack/react-query": "^5.99.2",
     "@tanstack/react-query-devtools": "^5.99.2",
     "axios": "^1.15.1",
+    "formik": "^2.4.9",
+    "lodash.debounce": "^4.0.8",
     "next": "16.2.4",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-paginate": "^8.3.0",
+    "yup": "^1.7.1"
   },
   "devDependencies": {
+    "@types/lodash.debounce": "^4.0.9",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
