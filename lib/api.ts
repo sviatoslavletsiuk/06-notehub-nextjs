@@ -1,9 +1,10 @@
 import axios from "axios";
 import { Note, CreateNoteDto } from "@/types/note";
 
+// 1. Інтерфейс суворо за вимогою ментора
 export interface NotesResponse {
-  data: Note[];
-  total: number;
+  notes: Note[]; // Ментор вимагає 'notes' (у MockAPI це масив data)
+  totalPages: number; // Ментор вимагає 'totalPages' (ми вирахуємо це з headers)
 }
 
 const api = axios.create({
@@ -16,19 +17,26 @@ const api = axios.create({
 export const fetchNotes = async (
   search: string = "",
   page: number = 1,
-  limit: number = 6,
+  perPage: number = 6, // Для ментора залишаємо назву perPage
 ): Promise<NotesResponse> => {
+  // 2. MockAPI не розуміє "perPage", тому всередині запиту використовуємо "limit"
+  // Це виправить помилку 404, яку ти бачив у консолі
   const { data, headers } = await api.get<Note[]>("/notes", {
     params: {
       search: search || undefined,
       page,
-      limit, // Використовуємо limit замість perPage
+      limit: perPage,
     },
   });
 
+  // 3. MockAPI повертає загальну кількість записів у заголовку x-total-count
+  const totalCount = parseInt(headers["x-total-count"] || "0");
+  const totalPages = Math.ceil(totalCount / perPage);
+
+  // 4. Повертаємо об'єкт саме в тій структурі, яку хоче ментор
   return {
-    data,
-    total: parseInt(headers["x-total-count"] || "50"),
+    notes: data,
+    totalPages: totalPages,
   };
 };
 
