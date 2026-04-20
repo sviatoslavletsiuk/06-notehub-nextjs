@@ -1,0 +1,28 @@
+.errorContainer {
+  color: #ff4d4f; /* Яскравий червоний колір для привернення уваги */
+  font-size: 0.85rem; /* Трішки менший шрифт, ніж у звичайного тексту */
+  margin-top: 5px; /* Відступ від поля введення */
+  min-height: 18px; /* Запобігає "стрибкам" верстки при появі помилки */
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: fadeIn 0.2s ease-in-out; /* Плавна поява */
+}
+
+/* Додаємо іконку перед текстом помилки (за бажанням) */
+.errorContainer::before {
+  content: "⚠";
+  font-size: 1rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
