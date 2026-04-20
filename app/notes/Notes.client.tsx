@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useQuery } from "@tanstack/react-query";
 import debounce from "lodash.debounce";
 import { fetchNotes } from "@/lib/api";
@@ -26,44 +26,48 @@ export default function NotesClient() {
     [],
   );
 
-  const handleSearchChange = (val: string) => {
-    setSearch(val);
-    debouncedHandler(val);
-  };
+  useEffect(() => {
+    return () => debouncedHandler.cancel();
+  }, [debouncedHandler]);
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes(debouncedSearch, page, 6),
+    placeholderData: (previousData) => previousData, // Виправлено для пагінації
   });
 
   return (
-    <div className={css.container}>
-      <div className={css.actions}>
-        <SearchBox value={search} onChange={handleSearchChange} />
+    <main className={css.container}>
+      <section className={css.actions}>
+        <SearchBox
+          value={search}
+          onChange={(v) => {
+            setSearch(v);
+            debouncedHandler(v);
+          }}
+        />
         <button onClick={() => setIsModalOpen(true)} className={css.addBtn}>
           Add Note
         </button>
-      </div>
+      </section>
 
-      {isLoading && <p>Loading...</p>}
-      {isError && <p>Error loading notes.</p>}
-
-      {!isLoading && !isError && (
-        <>
-          <NoteList notes={data?.notes || []} />
-          <Pagination
-            pageCount={data?.totalPages || 1}
-            forcePage={page - 1}
-            onPageChange={({ selected }) => setPage(selected + 1)}
-          />
-        </>
+      {isLoading && !data ? (
+        <p>Loading...</p>
+      ) : (
+        <NoteList notes={data?.notes || []} />
       )}
+
+      <Pagination
+        pageCount={data?.totalPages || 1}
+        forcePage={page - 1}
+        onPageChange={({ selected }) => setPage(selected + 1)}
+      />
 
       {isModalOpen && (
         <Modal onClose={() => setIsModalOpen(false)}>
           <NoteForm onCancel={() => setIsModalOpen(false)} />
         </Modal>
       )}
-    </div>
+    </main>
   );
 }

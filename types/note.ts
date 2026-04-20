@@ -6,16 +6,11 @@ export interface Note {
   content: string;
   tag: NoteTag;
   createdAt: string;
-  updatedAt: string; // Обов'язкове поле за фідбеком ментора
+  updatedAt: string;
 }
 
 export interface CreateNoteDto {
   title: string;
   content: string;
   tag: NoteTag;
-}
-
-export interface NotesResponse {
-  notes: Note[];
-  totalPages: number;
 }
