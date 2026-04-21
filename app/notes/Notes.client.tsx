@@ -33,11 +33,10 @@ export default function NotesClient() {
   const { data, isLoading } = useQuery({
     queryKey: ["notes", debouncedSearch, page],
     queryFn: () => fetchNotes(debouncedSearch, page, 6),
-    placeholderData: (previousData) => previousData,
   });
 
-  // Пагінація відображається лише якщо сторінок > 1
-  const shouldShowPagination = data && data.total > 6 && data.data.length > 0;
+  // Пагінація лише якщо більше 1 сторінки
+  const shouldShowPagination = data && data.totalPages > 1;
 
   return (
     <main className={css.mainContainer}>
@@ -57,12 +56,13 @@ export default function NotesClient() {
       {isLoading && !data ? (
         <p>Loading...</p>
       ) : (
-        <NoteList notes={data?.data || []} />
+        /* ПЕРЕДАЄМО data.notes ЗАМІСТЬ data */
+        <NoteList notes={data?.notes || []} />
       )}
 
       {shouldShowPagination && (
         <Pagination
-          pageCount={Math.ceil(data.total / 6)}
+          pageCount={data.totalPages}
           forcePage={page - 1}
           onPageChange={({ selected }) => setPage(selected + 1)}
         />
